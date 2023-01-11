@@ -149,10 +149,13 @@ class StreamsTest {
 	
 			List<Cliente> list = cliHome.findAll();
 			
-			List<Cliente> sinPedidos = list.stream()
-					.filter(null)
+			List<Integer> sinPedidos = list.stream()
+					.filter(c -> c.getPedidos().isEmpty())
+					.map(Cliente::getId)
 					.collect(toList());	
 		
+			sinPedidos.forEach(System.out::println);
+			
 			cliHome.commitTransaction();
 			
 		}
@@ -312,9 +315,12 @@ class StreamsTest {
 			//pedHome.beginTransaction();
 			comHome.beginTransaction();
 			
-			List<Comercial> list = comHome.findAll();		
+			List<Comercial> list = comHome.findAll();
 			
-			//TODO STREAMS
+			Double mediaDaniel = list.stream()
+											.filter(t -> t.getNombre().equals("Daniel") && t.getApellido1().equals("Sáez"))
+											.map(t -> t.get.getPedidos().toArray())
+											.collect(averagingDouble(Pedido::getTotal()));
 			
 			comHome.commitTransaction();
 			
